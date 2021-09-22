@@ -24,6 +24,13 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
     PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
 }
 
+void ATank::BeginPlay()
+{
+    Super::BeginPlay();
+
+    PlayerControllerRef = Cast<APlayerController>(GetController());
+}
+
 void ATank::Move(float Value)
 {
     FVector DeltaLocation = FVector::ZeroVector;
@@ -39,5 +46,5 @@ void ATank::Turn(float Value)
     // Yaw = Value * DeltaTime * TurnRate
     DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
     AddActorLocalRotation(DeltaRotation, true);
+    GetController();
 }
-

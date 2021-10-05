@@ -3,7 +3,7 @@
 
 #include "Projectile.h"
 #include "Components/StaticMeshComponent.h"
-#include "GameFramework/ProjectileMovementComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"	
 
 // Sets default values
 AProjectile::AProjectile()

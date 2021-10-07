@@ -22,6 +22,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartGame();
+
 private:
 
 	class ATank* Tank;
@@ -30,5 +33,4 @@ private:
 	float StartDelay = 3.f;
 
 	void HandleGameStart();
-
 };

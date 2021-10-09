@@ -46,6 +46,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	USoundBase *HitSound;
 
+	// UE 4.25 - UCameraShake; UE 4.26+ UMatineeCameraShake
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TSubclassOf<class UCameraShake> HitCameraShakeClass;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

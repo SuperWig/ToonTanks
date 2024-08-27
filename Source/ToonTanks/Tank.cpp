@@ -5,6 +5,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
 
 ATank::ATank()
@@ -20,10 +22,14 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-    PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
-    PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+    APlayerController* PlayerController = GetController<APlayerController>();
+    UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+    Subsystem->AddMappingContext(InputMappingContext.LoadSynchronous(), 0);
 
-    PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
+    auto EInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+    EInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATank::Move);
+    EInput->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ATank::Turn);
+    EInput->BindAction(FireAction, ETriggerEvent::Started, this, &ATank::Fire);
 }
 
 void ATank::Tick(float DeltaTime)
@@ -53,24 +59,23 @@ void ATank::HandleDestruction()
 void ATank::BeginPlay()
 {
     Super::BeginPlay();
-
     TankPlayerController = Cast<APlayerController>(GetController());
 }
 
-void ATank::Move(float Value)
+void ATank::Move(const FInputActionValue& Value)
 {
     FVector DeltaLocation = FVector::ZeroVector;
     // X = Value * DeltaTime * Speed
-    DeltaLocation.X = Value * Speed * UGameplayStatics::GetWorldDeltaSeconds(this);
+    DeltaLocation.X = Value.Get<float>() * Speed * UGameplayStatics::GetWorldDeltaSeconds(this);
     AddActorLocalOffset(DeltaLocation, true);
     
 }
 
-void ATank::Turn(float Value)
+void ATank::Turn(const FInputActionValue& Value)
 {
     FRotator DeltaRotation = FRotator::ZeroRotator;
     // Yaw = Value * DeltaTime * TurnRate
-    DeltaRotation.Yaw = Value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
+    DeltaRotation.Yaw = Value.Get<float>() * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
     AddActorLocalRotation(DeltaRotation, true);
     GetController();
 }

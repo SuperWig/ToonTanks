@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "BasePawn.h"
+#include "InputMappingContext.h"
 #include "Tank.generated.h"
+
+class UInputAction;
+struct FInputActionValue;
 
 /**
  * 
@@ -46,8 +50,18 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float TurnRate = 45.f;
 
-	void Move(float Value);
-	void Turn(float Value);
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TSoftObjectPtr<UInputMappingContext> InputMappingContext;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* MoveAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* TurnAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* FireAction;
+
+	void Move(const FInputActionValue& Value);
+	void Turn(const FInputActionValue& Value);
 
 	APlayerController* TankPlayerController;
 };

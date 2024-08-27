@@ -68,7 +68,7 @@ void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimi
 		if (HitCameraShakeClass)
 		{
 			// UE 4.25 - ClientPlayCameraShake; UE 4.26+ ClientStartCameraShake
-			GetWorld()->GetFirstPlayerController()->ClientPlayCameraShake(HitCameraShakeClass);
+			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
 		}
 	}
 	Destroy();

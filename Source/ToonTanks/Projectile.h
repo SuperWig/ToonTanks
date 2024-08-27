@@ -48,7 +48,7 @@ private:
 
 	// UE 4.25 - UCameraShake; UE 4.26+ UMatineeCameraShake
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	TSubclassOf<class UCameraShake> HitCameraShakeClass;
+	TSubclassOf<class UCameraShakeBase> HitCameraShakeClass;
 
 public:
 	// Called every frame
